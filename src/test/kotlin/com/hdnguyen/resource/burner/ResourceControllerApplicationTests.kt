@@ -1,4 +1,4 @@
-package com.hdnguyen.resource_controller
+package com.hdnguyen.resource.burner
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

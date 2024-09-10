@@ -1,6 +1,6 @@
-package com.hdnguyen.resource_controller.controller
+package com.hdnguyen.resource.burner.controller
 
-import com.hdnguyen.resource_controller.service.MemoryResourceManager
+import com.hdnguyen.resource.burner.service.MemoryResourceManager
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus

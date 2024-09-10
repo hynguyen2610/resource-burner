@@ -1,4 +1,4 @@
-package com.hdnguyen.resource_controller.controller
+package com.hdnguyen.resource.burner.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

@@ -1,4 +1,4 @@
-package com.hdnguyen.resource_controller
+package com.hdnguyen.resource.burner
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -8,5 +8,5 @@ class ResourceControllerApplication
 
 fun main(args: Array<String>) {
 	runApplication<ResourceControllerApplication>(*args)
-	println("Resource controller is running")
+	println("Resource Burner is running")
 }

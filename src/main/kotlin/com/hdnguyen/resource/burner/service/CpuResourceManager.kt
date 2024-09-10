@@ -1,4 +1,4 @@
-package com.hdnguyen.resource_controller.service
+package com.hdnguyen.resource.burner.service
 
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadPoolExecutor
