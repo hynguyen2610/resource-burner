@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-burner
+  labels:
+    app: resource-burner
+spec:
+  selector:
+    matchLabels:
+      app: resource-burner
+  template:
+    metadata:
+      labels:
+        app: resource-burner
+    spec:
+      containers:
+        - name: resource-burner-container
+          image: bluestorm1288/resource-burner:latest  # Replace this with your Docker image
+          ports:
+            - containerPort: 8500
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: resource-burner-service
+spec:
+  selector:
+    app: resource-burner
+  ports:
+    - protocol: TCP
+      port: 8500  # External port
+      targetPort: 8500  # Application port in the container
+  type: LoadBalancer  # Change to NodePort if you don't want a LoadBalancer
