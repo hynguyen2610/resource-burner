@@ -14,6 +14,29 @@ java {
 	}
 }
 
+tasks.bootJar {
+	manifest {
+		attributes(
+			"Implementation-Version" to project.version
+		)
+	}
+}
+
+tasks.register("runJar", Exec::class.java) {
+	dependsOn(tasks.bootJar) // Ensure the JAR is built before running it
+	group = "application"
+	description = "Runs the Spring Boot application using the packaged JAR."
+
+	// Use project name and version to construct the JAR file path
+	val jarFileName = "${project.name}-${project.version}.jar"
+	val jarFilePath = "build/libs/$jarFileName"
+	println("Jar file path: $jarFilePath")
+
+	// Command to run the JAR
+	commandLine("java", "-jar", jarFilePath)
+}
+
+
 repositories {
 	mavenCentral()
 }
