@@ -9,6 +9,13 @@ import org.springframework.http.HttpStatus
 @RequestMapping("/memory")
 class MemoryResourceController(private var memoryResourceManager: MemoryResourceManager) {
 
+    @PostMapping("/chunk-size")
+    fun setChunkSize(@RequestBody csr: ChunkSizeRequest): ResponseEntity<String> {
+        memoryResourceManager.updateMemoryChunkSize(csr.chunkMB.toInt())
+        val message = String.format("Memory chunk size set to %s MB", csr)
+        return ResponseEntity(message, HttpStatus.OK)
+    }
+
     @PostMapping("/start-load")
     fun startMemoryLoad(): ResponseEntity<String> {
         memoryResourceManager.startMemoryLoad()
@@ -39,3 +46,6 @@ class MemoryResourceController(private var memoryResourceManager: MemoryResource
         return ResponseEntity("Forced GC!", HttpStatus.OK)
     }
 }
+
+data class ChunkSizeRequest(val chunkMB: String)
+

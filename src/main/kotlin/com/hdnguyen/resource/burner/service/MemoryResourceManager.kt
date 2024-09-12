@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component
 import kotlin.concurrent.thread
 
 @Component
-class MemoryResourceManager {
+class MemoryResourceManager : BaseService() {
 
     @Value("\${memory.chunk.size:50}")
-    lateinit var memoryChunkSize: String // Default to 50MB if not specified
+    private var memoryChunkSize: Int = 50 // Default to 50MB if not specified
 
     @Volatile private var isRunning = false
     @Volatile private var isPaused = false
@@ -18,6 +18,7 @@ class MemoryResourceManager {
     @Synchronized
     fun startMemoryLoad() {
         if (isRunning) return
+        logger.info("Memory load started")
         isRunning = true
         isPaused = false
 
@@ -28,8 +29,8 @@ class MemoryResourceManager {
                 while (isRunning) {
                     if (!isPaused) {
                         try {
-                            // Allocate memory chunk (50MB or specified size)
-                            val chunk = ByteArray(memoryChunkSize.toInt() * 1024 * 1024)
+                            // Allocate memory chunk (size specified)
+                            val chunk = ByteArray(memoryChunkSize * 1024 * 1024)
                             chunk.fill(0) // Fill the array with zeroes or any data
                             memoryBlocks.add(chunk)
                         } catch (e: OutOfMemoryError) {
@@ -37,8 +38,10 @@ class MemoryResourceManager {
                             e.printStackTrace()
                             stopMemoryLoad() // Stop memory load when OOM occurs
                         }
+                    } else {
+                        // Sleep when paused
+                        Thread.sleep(1000) // Sleep for 1 second
                     }
-                    Thread.sleep(1000) // Sleep for 1 second
                 }
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()
@@ -60,16 +63,23 @@ class MemoryResourceManager {
         // Clear the allocated memory to free up resources
         memoryBlocks.clear()
         System.gc() // Suggest GC to reclaim memory (note that GC is not guaranteed)
-        println("Memory burn stopped")
+        logger.info("Memory load stopped")
     }
 
     @Synchronized
     fun pauseMemoryLoad() {
         isPaused = true
+        logger.info("Memory load paused")
     }
 
     @Synchronized
     fun resumeMemoryLoad() {
         isPaused = false
+        logger.info("Memory load resumed")
+    }
+
+    @Synchronized
+    fun updateMemoryChunkSize(newSizeMB: Int) {
+        memoryChunkSize = newSizeMB
     }
 }
